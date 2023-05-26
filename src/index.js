@@ -1,5 +1,7 @@
 const express = require('express');
 const getTalkers = require('./utils/getTalkers');
+const token = require('crypto');
+const { validateEmail, validatePassword } = require('./middlewares/validateLogin');
 
 const app = express();
 app.use(express.json());
@@ -28,4 +30,9 @@ app.get('/talker/:id', async (req, res) => {
   const talker = talkers.find((talk) => talk.id === Number(id));
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   return res.status(HTTP_OK_STATUS).json(talker);
+});
+
+app.post('/login', validateEmail, validatePassword, (_req, res) => {
+  const tokenGenerate = token.randomBytes(8).toString('hex');
+  return res.status(HTTP_OK_STATUS).json({ token: tokenGenerate });
 });
