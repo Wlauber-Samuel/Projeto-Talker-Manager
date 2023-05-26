@@ -1,6 +1,6 @@
 const express = require('express');
-const getTalkers = require('./utils/getTalkers');
 const token = require('crypto');
+const getTalkers = require('./utils/getTalkers');
 const { validateEmail, validatePassword } = require('./middlewares/validateLogin');
 
 const app = express();
