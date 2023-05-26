@@ -6,7 +6,7 @@ const validateEmail = (req, res, next) => {
     }
     if (!regex.test(email)) {
         return res.status(400)
-        .json({ message: 'O "email" deve ter o formato "email@email.com"'});
+        .json({ message: 'O "email" deve ter o formato "email@email.com"' });
     }
     next();
 };
