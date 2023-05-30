@@ -82,3 +82,18 @@ app.put('/talker/:id',
     await fs.writeFile(`${__dirname}/talker.json`, JSON.stringify(talkers));
     return res.status(200).json(newTalker);
   });
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await getTalkers();
+  const findTalker = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+
+  if (findTalker === -1) {
+    return res.status(404)
+      .json({ message: 'Pessoa palestrante não encontrada' });
+  }
+
+  talkers.splice(findTalker, 1);
+  await fs.writeFile(`${__dirname}/talker.json`, JSON.stringify(talkers));
+  return res.status(204).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
