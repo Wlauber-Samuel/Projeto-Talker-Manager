@@ -3,7 +3,12 @@ const token = require('crypto');
 const fs = require('fs').promises;
 const getTalkers = require('./utils/getTalkers');
 const { validateEmail, validatePassword } = require('./middlewares/validateLogin');
-const { validateName, validateAge, validateTalk, validateRate, validateWatchedAt, validateToken } = require('./middlewares/validateTalker');
+const { validateName,
+  validateAge,
+  validateTalk,
+  validateRate,
+  validateWatchedAt,
+  validateToken } = require('./middlewares/validateTalker');
 
 const app = express();
 app.use(express.json());
@@ -51,6 +56,6 @@ app.post('/talker',
     const id = talkers.length + 1;
     const newTalker = { name, age, id, talk };
     talkers.push(newTalker);
-    await fs.writeFile(__dirname + '/talker.json', JSON.stringify(talkers));
+    await fs.writeFile(__dirname, 'talker.json', JSON.stringify(talkers));
     return res.status(201).json(newTalker);
   });
