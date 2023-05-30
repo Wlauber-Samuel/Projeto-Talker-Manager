@@ -60,9 +60,9 @@ const validateTalk = (req, res, next) => {
     next();
 };
 
-// diminui complexidade do validateRate
-const rateValid = (rate) => {
-    if (!Number.isInteger(rate) || rate < 1 || rate > 5) {
+// Diminui complexidade do validateRate
+const validRate = (rate) => {
+    if (rate < 1 || rate > 5) {
         return false;
     }
     return true;
@@ -74,7 +74,7 @@ const validateRate = (req, res, next) => {
     if (!rate && rate !== 0) {
         return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
     }
-    if (!Number.isInteger(rate) || rateValid(rate)) {
+    if (!Number.isInteger(rate) || !validRate(rate)) {
         return res.status(400)
         .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
     }

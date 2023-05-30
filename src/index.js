@@ -56,6 +56,6 @@ app.post('/talker',
     const id = talkers.length + 1;
     const newTalker = { name, age, id, talk };
     talkers.push(newTalker);
-    await fs.writeFile(__dirname, 'talker.json', JSON.stringify(talkers));
+    await fs.writeFile(`${__dirname}/talker.json`, JSON.stringify(talkers));
     return res.status(201).json(newTalker);
   });
