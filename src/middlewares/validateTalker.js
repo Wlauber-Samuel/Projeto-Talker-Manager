@@ -81,6 +81,29 @@ const validateRate = (req, res, next) => {
     next();
 };
 
+// Valida o rate que vem da query
+const validateRateQuery = (req, res, next) => {
+    const  { rate }  = req.query;
+    if (!rate) return next();
+    const rateNumber = Number(rate);
+    if (!Number.isInteger(rateNumber) || !validRate(rateNumber)) {
+        return res.status(400)
+        .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+    }
+    next();
+};
+
+// Valida o watcheAt que vem da query
+const validateWatchedAtQuery = (req, res, next) => {
+    const { date } = req.query;
+    if (!date) return next();
+    if (!regexWatchedAt.test(date)) {
+        return res.status(400)
+        .json({ message: 'O campo "date" deve ter o formato "dd/mm/aaaa"' });
+    }
+    next();
+};
+
 module.exports = {
     validateToken,
     validateName,
@@ -88,4 +111,6 @@ module.exports = {
     validateWatchedAt,
     validateTalk,
     validateRate,
+    validateRateQuery,
+    validateWatchedAtQuery,
 };

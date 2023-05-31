@@ -8,19 +8,18 @@ const { validateName,
   validateTalk,
   validateRate,
   validateWatchedAt,
-  validateToken } = require('./middlewares/validateTalker');
+  validateToken,
+  validateRateQuery,
+  validateWatchedAtQuery } = require('./middlewares/validateTalker');
 
 const app = express();
 app.use(express.json());
-
 const HTTP_OK_STATUS = 200;
 const PORT = process.env.PORT || '3001';
-
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
-
 app.listen(PORT, () => {
   console.log('Online');
 });
@@ -31,11 +30,21 @@ app.get('/talker', async (_req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 });
 
-app.get('/talker/search', validateToken, async (req, res) => {
-  const { q } = req.query;
+app.get('/talker/search', validateToken, validateRateQuery, validateWatchedAtQuery, async (req, res) => {
+  const { q, rate, date } = req.query;
   const talkers = await getTalkers();
-  const talker = talkers.filter((talk) => talk.name.includes(q));
-  if (!talker) return res.status(HTTP_OK_STATUS).json([]);
+  if (!talkers) return res.status(HTTP_OK_STATUS).json([]);
+  let talker = talkers;
+
+  if (q) {
+    talker = talkers.filter((talk) => talk.name.includes(q));
+  }
+  if (rate) {
+    talker = talkers.filter((item) => item.talk.rate === Number(rate));
+  }
+  if (date) {
+    talker = talkers.filter((item) => item.talk.watchedAt === date);
+  }
   return res.status(HTTP_OK_STATUS).json(talker);
 });
 
