@@ -11,7 +11,7 @@ const { validateName,
   validateToken,
   validateRateQuery,
   validateWatchedAtQuery, 
-  validateRateBody} = require('./middlewares/validateTalker');
+  validateRateBody } = require('./middlewares/validateTalker');
 
 const app = express();
 app.use(express.json());
