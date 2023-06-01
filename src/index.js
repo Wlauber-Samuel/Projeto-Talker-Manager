@@ -30,23 +30,25 @@ app.get('/talker', async (_req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 });
 
-app.get('/talker/search', validateToken, validateRateQuery, validateWatchedAtQuery, async (req, res) => {
-  const { q, rate, date } = req.query;
-  const talkers = await getTalkers();
-  if (!talkers) return res.status(HTTP_OK_STATUS).json([]);
-  let talker = talkers;
+app.get('/talker/search', validateToken,
+  validateRateQuery,
+  validateWatchedAtQuery, async (req, res) => {
+    const { q, rate, date } = req.query;
+    const talkers = await getTalkers();
+    if (!talkers) return res.status(HTTP_OK_STATUS).json([]);
+    let talker = talkers;
 
-  if (q) {
-    talker = talkers.filter((talk) => talk.name.includes(q));
-  }
-  if (rate) {
-    talker = talkers.filter((item) => item.talk.rate === Number(rate));
-  }
-  if (date) {
-    talker = talkers.filter((item) => item.talk.watchedAt === date);
-  }
-  return res.status(HTTP_OK_STATUS).json(talker);
-});
+    if (q) {
+      talker = talker.filter((talk) => talk.name.includes(q));
+    }
+    if (rate) {
+      talker = talker.filter((item) => item.talk.rate === Number(rate));
+    }
+    if (date) {
+      talker = talker.filter((item) => item.talk.watchedAt === date);
+    }
+    return res.status(HTTP_OK_STATUS).json(talker);
+  });
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;

@@ -83,7 +83,7 @@ const validateRate = (req, res, next) => {
 
 // Valida o rate que vem da query
 const validateRateQuery = (req, res, next) => {
-    const  { rate }  = req.query;
+    const { rate } = req.query;
     if (!rate) return next();
     const rateNumber = Number(rate);
     if (!Number.isInteger(rateNumber) || !validRate(rateNumber)) {
@@ -99,7 +99,7 @@ const validateWatchedAtQuery = (req, res, next) => {
     if (!date) return next();
     if (!regexWatchedAt.test(date)) {
         return res.status(400)
-        .json({ message: 'O campo "date" deve ter o formato "dd/mm/aaaa"' });
+        .json({ message: 'O parâmetro "date" deve ter o formato "dd/mm/aaaa"' });
     }
     next();
 };
