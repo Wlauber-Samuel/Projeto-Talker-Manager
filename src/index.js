@@ -10,7 +10,8 @@ const { validateName,
   validateWatchedAt,
   validateToken,
   validateRateQuery,
-  validateWatchedAtQuery } = require('./middlewares/validateTalker');
+  validateWatchedAtQuery, 
+  validateRateBody} = require('./middlewares/validateTalker');
 
 const app = express();
 app.use(express.json());
@@ -115,4 +116,21 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   talkers.splice(findTalker, 1);
   await fs.writeFile(`${__dirname}/talker.json`, JSON.stringify(talkers));
   return res.status(204).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
+app.patch('/talker/rate/:id', validateToken, validateRateBody, async (req, res) => {
+  const { id } = req.params;
+  const { rate } = req.body;
+
+  const talkers = await getTalkers();
+  const findTalker = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+
+  if (findTalker === -1) {
+    return res.status(404)
+      .json({ message: 'Pessoa palestrante não encontrada' });
+  }
+
+  talkers[findTalker].talk.rate = rate;
+  await fs.writeFile(`${__dirname}/talker.json`, JSON.stringify(talkers));
+  return res.status(204).json(talkers[findTalker]);
 });
